@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>LUC</title>
+</head>
+
+<body>
+    <label>mac address : </label>
+    <select id="mac">
+        <option value="30AEA49A15B0">หน้าเคาร์เตอร์</option>
+        <option value="30AEA49A136C">กลาง office</option>
+        <option value="240AC41C788C">240AC41C788C</option>
+        
+        <!-- A -->
+        <!-- <option value="30AEA49A1588">30AEA49A1588</option>
+        <option value="30AEA49A1650">30AEA49A1650</option>
+        <option value="30AEA49A1460">30AEA49A1460</option>
+        <option value="30AEA49A14C4">30AEA49A14C4</option>
+        <option value="30AEA49A1658">30AEA49A1658</option>
+        <option value="30AEA49A1444">30AEA49A1444</option>
+        <option value="30AEA49A1454">30AEA49A1454</option>
+        <option value="30AEA49A148C">30AEA49A148C</option> -->
+        <!-- B -->
+        <!-- <option value="C44F332323AD">6</option>
+        <option value="C44F33232295">7</option>
+        <option value="C44F33231FC1">8</option>
+        <option value="C44F332322DD">9</option>
+        <option value="C44F3323204D">10</option>
+        <option value="C44F332320B9">11</option>
+        <option value="30AEA49A148C">12</option>
+        <option value="C44F33231FDD">13</option>
+        <option value="C44F33232285">15</option>
+        <option value="C44F33232001">16</option>
+        <option value="30AEA49A1658">17</option>
+        <option value="30AEA49A14C4">18</option> -->
+
+
+
+    </select>
+    <button type="button" class="btn btn-success" id="onB">ON ALL</button>
+    <button type="button" class="btn btn-danger" id="offB">OFF ALL</button><br>
+
+    <label>channel : </label>
+    <select id="channel">
+        <option value="1">channel 1</option>
+        <option value="2">channel 2</option>
+        <option value="3">channel 3</option>
+        <option value="4">channel 4</option>
+        <option value="5">set time dimming</option>
+    </select><br>
+
+    <label>bright : </label>
+    <input type="text" id="bright">
+    <input type="submit" value="submit" id="submit"><br><br>
+
+    <label>mac address : </label><button type="button" class="btn btn-primary" id="mac1">0</button><br>
+    <label>channel : </label><button type="button" class="btn btn-success" id="ch1">0</button><br>
+    <label>bright : </label><button type="button" class="btn btn-warning" id="br1">0</button></label>
+
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#submit').click(function () {
+                $.ajax({
+                    url: "/process",
+                    type: "POST",
+                    data: {
+                        channel: $("#channel").val(),
+                        bright: $("#bright").val(),
+                        mac: $("#mac").val()
+                    },
+                    success: function (data) {
+                        datas = data;
+                        console.log(datas);
+                        swal({
+                            title: "Respond",
+                            icon: "success",
+                            button: "OK",
+                        });
+                        $("#mac1").text(datas.mac);
+                        $("#ch1").text(datas.ch);
+                        $("#br1").text(datas.br);
+                        // location.reload();
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#onB').click(function () {
+                $.ajax({
+                    url: "/onB",
+                    type: "POST",
+                    data: {
+                        onb: '1',
+                        mac: $("#mac").val()
+                    },
+                    success: function (data) {
+                        datas = data;
+                        console.log(datas);
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#offB').click(function () {
+                $.ajax({
+                    url: "/offB",
+                    type: "POST",
+                    data: {
+                        offb: '1',
+                        mac: $("#mac").val()
+                    },
+                    success: function (data) {
+                        datas = data;
+                        console.log(datas);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
